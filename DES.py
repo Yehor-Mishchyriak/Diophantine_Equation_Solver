@@ -1,5 +1,5 @@
 # Imports
-from math import gcd
+from math import gcd, floor, ceil
 import tkinter as tk
 
 # General configuration
@@ -11,10 +11,6 @@ win.resizable(False, False)
 
 # Creation of frame(s)
 main_frame = tk.Frame(win, width=315, height=500, bg='#153d4a')
-
-# Importing PNG(s)
-icon_pic = tk.PhotoImage(file='Diophantine equation solver.png')
-win.iconphoto(True, icon_pic)
 
 # Creation of functions
 
@@ -39,7 +35,7 @@ def middle_mystr(coeff):
     elif coeff >= 0:
         return ' + ' + str(coeff)
     else:
-        return str(coeff)
+        return ' - ' + str(abs(coeff))
 
 
 # This function turns coefficient whose type is float to str,
@@ -144,6 +140,20 @@ def get_the_values_xy(a, b, c):
             var += 1
 
 
+def does_it_satisfy_x(value, b, x0):
+    if -b * value + x0 > 0:
+        return True
+    else:
+        return False
+
+
+def does_it_satisfy_y(value, a, y0):
+    if a * value + y0 > 0:
+        return True
+    else:
+        return False
+
+
 # Functions TIED with the GUI
 def solve():
     users_output['state'] = 'normal'                                                # DATA TYPE - TUPLE
@@ -185,21 +195,6 @@ def solve():
     users_output.insert(data_positioning, 'y = an + y₀')
     data_positioning += 2
     users_output.insert(data_positioning, 'Подставим значения: ')
-    if satisfying_values[0] >= 0:
-        data_positioning += 2
-        users_output.insert(data_positioning, coefficients_vars[1] + ' = ' + beginning_mystr(-coefficients_vars[2]) + 'n + ' + str(abs(satisfying_values[0])))
-    else:
-        data_positioning += 2
-        users_output.insert(data_positioning, coefficients_vars[1] + ' = ' + beginning_mystr(-coefficients_vars[2]) + 'n - ' + str(abs(satisfying_values[0])))
-    if satisfying_values[1] >= 0:
-        data_positioning += 2
-        users_output.insert(data_positioning, coefficients_vars[3] + ' = ' + beginning_mystr(coefficients_vars[0]) + 'n + ' + str(abs(satisfying_values[1])))
-    else:
-        data_positioning += 2
-        users_output.insert(data_positioning, coefficients_vars[3] + ' = ' + beginning_mystr(coefficients_vars[0]) + 'n - ' + str(abs(satisfying_values[1])))
-
-    data_positioning += 2
-    users_output.insert(data_positioning, 'Ответ: ')
 
     # X
     if satisfying_values[0] == 0:
@@ -224,6 +219,215 @@ def solve():
         else:
             data_positioning += 2
             users_output.insert(data_positioning, coefficients_vars[3] + ' = ' + beginning_mystr(coefficients_vars[0]) + 'n - ' + str(abs(satisfying_values[1])))
+
+    data_positioning += 2
+    users_output.insert(data_positioning, 'Множество значений n при которых решения положительные: ')
+    data_positioning += 2
+
+    # This is for y
+    # ==================================================================================================================
+    if coefficients_vars[0] < 0:    # a < 0
+        yvalue = satisfying_values[1] / coefficients_vars[0]
+        if check_int(yvalue):
+            yvalue = int(yvalue)
+            if does_it_satisfy_y(yvalue, coefficients_vars[0], satisfying_values[1]):
+                yinequality_sign = ' ≤ '
+            else:
+                yinequality_sign = ' < '
+        else:
+            yvalue = floor(yvalue)
+            if does_it_satisfy_y(yvalue, coefficients_vars[0], satisfying_values[1]):
+                yinequality_sign = ' ≤ '
+            else:
+                yinequality_sign = ' < '
+    else:   # a > 0
+        yvalue = -satisfying_values[1] / coefficients_vars[0]
+        if check_int(yvalue):
+            yvalue = int(yvalue)
+            if does_it_satisfy_y(yvalue, coefficients_vars[0], satisfying_values[1]):
+                yinequality_sign = ' ≥ '
+            else:
+                yinequality_sign = ' > '
+        else:
+            yvalue = ceil(yvalue)
+            if does_it_satisfy_y(yvalue, coefficients_vars[0], satisfying_values[1]):
+                yinequality_sign = ' ≥ '
+            else:
+                yinequality_sign = ' > '
+    # ==================================================================================================================
+
+    # This is for x
+    # ==================================================================================================================
+    if coefficients_vars[2] < 0:    # b < 0
+        xvalue = -satisfying_values[0] / -coefficients_vars[2]
+        if check_int(xvalue):
+            xvalue = int(xvalue)
+            if does_it_satisfy_x(xvalue, coefficients_vars[2], satisfying_values[0]):
+                xinequality_sign = ' ≥ '
+            else:
+                xinequality_sign = ' > '
+        else:
+            xvalue = ceil(xvalue)
+            if does_it_satisfy_x(xvalue, coefficients_vars[2], satisfying_values[0]):
+                xinequality_sign = ' ≥ '
+            else:
+                xinequality_sign = ' > '
+    else:   # b > 0
+        xvalue = satisfying_values[0] / coefficients_vars[2]
+        if check_int(xvalue):
+            xvalue = int(xvalue)
+            if does_it_satisfy_x(xvalue, coefficients_vars[2], satisfying_values[0]):
+                xinequality_sign = ' ≤ '
+            else:
+                xinequality_sign = ' < '
+        else:
+            xvalue = floor(xvalue)
+            if does_it_satisfy_x(xvalue, coefficients_vars[2], satisfying_values[0]):
+                xinequality_sign = ' ≤ '
+            else:
+                xinequality_sign = ' < '
+
+    # ==================================================================================================================
+
+    users_output.insert(data_positioning, 'Г n' + xinequality_sign + str(xvalue) + ';')
+    data_positioning += 1
+    users_output.insert(data_positioning, '|  ')
+    data_positioning += 1
+    users_output.insert(data_positioning, 'L n' + yinequality_sign + str(yvalue) + '.')
+
+    # /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+
+    temporary_sign_x = xinequality_sign
+    temporary_sign_y = yinequality_sign
+
+    if temporary_sign_x != ' < ' and temporary_sign_x != ' > ':
+        if temporary_sign_x == ' ≤ ':
+            temporary_sign_x = ' < '
+        else:
+            temporary_sign_x = ' > '
+
+    if temporary_sign_y != ' < ' and temporary_sign_y != ' > ':
+        if temporary_sign_y == ' ≤ ':
+            temporary_sign_y = ' < '
+        else:
+            temporary_sign_y = ' > '
+
+    # /-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-/-
+
+    if temporary_sign_x == temporary_sign_y == ' > ':
+        if xvalue > yvalue or xvalue == yvalue:
+            data_positioning += 2
+            if xinequality_sign == ' ≥ ' and does_it_satisfy_y(xvalue, coefficients_vars[0], satisfying_values[1]):
+                users_output.insert(data_positioning, 'n Є [ ' + str(xvalue) + ' ; +∞ )')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+            else:
+                users_output.insert(data_positioning, 'n Є ( ' + str(xvalue) + ' ; +∞ )')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+        else:
+            data_positioning += 2
+            if yinequality_sign == ' ≥ ' and does_it_satisfy_x(yvalue, coefficients_vars[2], satisfying_values[0]):
+                users_output.insert(data_positioning, 'n Є [ ' + str(yvalue) + ' ; +∞ )')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+            else:
+                users_output.insert(data_positioning, 'n Є ( ' + str(yvalue) + ' ; +∞ )')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+    elif temporary_sign_x == temporary_sign_y == ' < ':
+        if xvalue < yvalue or xvalue == yvalue:
+            data_positioning += 2
+            if xinequality_sign == ' ≤ ' and does_it_satisfy_y(xvalue, coefficients_vars[0], satisfying_values[1]):
+                users_output.insert(data_positioning, 'n Є ( -∞ ; ' + str(xvalue) + ' ]')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+            else:
+                users_output.insert(data_positioning, 'n Є ( -∞ ; ' + str(xvalue) + ' )')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+        else:
+            data_positioning += 2
+            if yinequality_sign == ' ≤ ' and does_it_satisfy_x(yvalue, coefficients_vars[2], satisfying_values[0]):
+                users_output.insert(data_positioning, 'n Є ( -∞ ; ' + str(yvalue) + ' ]')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+            else:
+                users_output.insert(data_positioning, 'n Є ( -∞ ; ' + str(yvalue) + ' )')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+    else:
+        if xvalue == yvalue:
+            if xinequality_sign == ' ≥ ' or xinequality_sign == ' ≤ ':
+                if yinequality_sign == ' ≥ ' or yinequality_sign == ' ≤ ':
+                    data_positioning += 2
+                    users_output.insert(data_positioning, 'n Є { ' + str(xvalue) + ' }')
+                    data_positioning += 2
+                    users_output.insert(data_positioning, 'Кол-во положительных решений решений: 1')
+                else:
+                    data_positioning += 2
+                    users_output.insert(data_positioning, 'n Є {}')
+                    data_positioning += 2
+                    users_output.insert(data_positioning, 'Кол-во положительных решений решений: 0')
+            else:
+                data_positioning += 2
+                users_output.insert(data_positioning, 'n Є {}')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: 0')
+
+        elif temporary_sign_x == ' > ':
+            if xvalue > yvalue:
+                data_positioning += 2
+                users_output.insert(data_positioning, 'n Є {}')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: 0')
+            else:
+                data_positioning += 2
+                if xinequality_sign == ' ≥ ' and does_it_satisfy_y(xvalue, coefficients_vars[0], satisfying_values[1]):
+                    left_bracket = '[ '
+                else:
+                    left_bracket = '( '
+
+                if yinequality_sign == ' ≤ ' and does_it_satisfy_x(yvalue, coefficients_vars[2], satisfying_values[0]):
+                    right_bracket = ' ]'
+                else:
+                    right_bracket = ' )'
+                users_output.insert(data_positioning,
+                                    'n Є ' + left_bracket + str(xvalue) + ' ; ' + str(yvalue) + right_bracket)
+                data_positioning += 2
+                if left_bracket == '[ ':
+                    xvalue -= 1
+                if right_bracket == ' ]':
+                    yvalue += 1
+                users_output.insert(data_positioning,
+                                    'Кол-во положительных решений решений: ' + str(yvalue - 1 - xvalue))
+        else:
+
+            if yvalue > xvalue:
+                data_positioning += 2
+                users_output.insert(data_positioning, 'n Є {}')
+                data_positioning += 2
+                users_output.insert(data_positioning, 'Кол-во положительных решений решений: 0')
+            else:
+                data_positioning += 2
+                if yinequality_sign == ' ≥ ' and does_it_satisfy_x(yvalue, coefficients_vars[2], satisfying_values[0]):
+                    left_bracket = '[ '
+                else:
+                    left_bracket = '( '
+
+                if xinequality_sign == ' ≤ ' and does_it_satisfy_y(xvalue, coefficients_vars[0], satisfying_values[1]):
+                    right_bracket = ' ]'
+                else:
+                    right_bracket = ' )'
+                users_output.insert(data_positioning,
+                                    'n Є ' + left_bracket + str(yvalue) + ' ; ' + str(xvalue) + right_bracket)
+                data_positioning += 2
+                if left_bracket == '[ ':
+                    yvalue -= 1
+                if right_bracket == ' ]':
+                    xvalue += 1
+                users_output.insert(data_positioning,
+                                    'Кол-во положительных решений решений: ' + str(xvalue - 1 - yvalue))
 
     users_output['state'] = 'disabled'
 
