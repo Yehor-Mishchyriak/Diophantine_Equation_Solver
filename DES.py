@@ -178,7 +178,7 @@ def solve():
             coefficients_vars[i] = int(coefficient / gcd_of_a_b)
             i += 2
         data_positioning += 2
-        users_output.insert(data_positioning, 'Сократим коэф. на ' + str(gcd_of_a_b) + ':')
+        users_output.insert(data_positioning, 'Сократим коэффициенты уравнения на ' + str(gcd_of_a_b) + ':')
         data_positioning += 2
         users_output.insert(data_positioning, beginning_mystr(coefficients_vars[0]) + coefficients_vars[1] + middle_mystr(coefficients_vars[2]) + coefficients_vars[3] + ' = ' + str(coefficients_vars[4]))
     # Now we're getting two values for 'x' and 'y' which will satisfy the equation 'ax + by = c'
