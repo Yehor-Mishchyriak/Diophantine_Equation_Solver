@@ -163,13 +163,13 @@ def solve():
     users_output.insert(1.0, '\n' * 1000)
     data_positioning = 1.2
     if coefficients_vars == '<ERROR>' or coefficients_vars[1] == coefficients_vars[3]:
-        users_output.insert(data_positioning, 'К сожалению, я решаю только уравнения вида \"ax+by=c\" :(')
+        users_output.insert(data_positioning, 'Unfortunately, I solve equations only of this type - \"ax+by=c\" :(')
         return None
     gcd_of_a_b = gcd(coefficients_vars[0], coefficients_vars[2])
     users_output.insert(1.2, coefficients_vars[5])
     if not check_int(coefficients_vars[4] / gcd_of_a_b):
         data_positioning += 2
-        users_output.insert(data_positioning, 'Уравнение ' + coefficients_vars[5] + ' решить в целых числах невозможно.')
+        users_output.insert(data_positioning, 'The equation ' + coefficients_vars[5] + ' cannot be solved in whole numbers.')
         return None
     # Reducing the coefficients dividing by gcd(a,b,c) if possible
     if coefficients_vars[0] != coefficients_vars[0] / gcd_of_a_b:
@@ -178,23 +178,23 @@ def solve():
             coefficients_vars[i] = int(coefficient / gcd_of_a_b)
             i += 2
         data_positioning += 2
-        users_output.insert(data_positioning, 'Сократим коэффициенты уравнения на ' + str(gcd_of_a_b) + ':')
+        users_output.insert(data_positioning, 'Let\'s reduce the coefficients of the equation by ' + str(gcd_of_a_b) + ' times:')
         data_positioning += 2
         users_output.insert(data_positioning, beginning_mystr(coefficients_vars[0]) + coefficients_vars[1] + middle_mystr(coefficients_vars[2]) + coefficients_vars[3] + ' = ' + str(coefficients_vars[4]))
     # Now we're getting two values for 'x' and 'y' which will satisfy the equation 'ax + by = c'
     satisfying_values = get_the_values_xy(coefficients_vars[0], coefficients_vars[2], coefficients_vars[4])
     data_positioning += 2
-    users_output.insert(data_positioning, 'Пара значений удовлетворяющих равенство: ')
+    users_output.insert(data_positioning, 'A couple of values satisfying the equation: ')
     data_positioning += 2
     users_output.insert(data_positioning, coefficients_vars[1] + '₀ = ' + str(satisfying_values[0]) + '; ' + coefficients_vars[3] + '₀ = ' + str(satisfying_values[1]))
     data_positioning += 2
-    users_output.insert(data_positioning, 'Формулы: ')
+    users_output.insert(data_positioning, 'Formulas: ')
     data_positioning += 2
     users_output.insert(data_positioning, 'x = -bn + x₀')
     data_positioning += 2
     users_output.insert(data_positioning, 'y = an + y₀')
     data_positioning += 2
-    users_output.insert(data_positioning, 'Подставим значения: ')
+    users_output.insert(data_positioning, 'Let\'s substitute the values: ')
 
     # X
     if satisfying_values[0] == 0:
@@ -221,7 +221,7 @@ def solve():
             users_output.insert(data_positioning, coefficients_vars[3] + ' = ' + beginning_mystr(coefficients_vars[0]) + 'n - ' + str(abs(satisfying_values[1])))
 
     data_positioning += 2
-    users_output.insert(data_positioning, 'Множество значений n при которых решения положительные: ')
+    users_output.insert(data_positioning, 'An array of the "n" values which turn the formulas in positive solutions: ')
     data_positioning += 2
 
     # This is for y
@@ -320,42 +320,42 @@ def solve():
             if xinequality_sign == ' ≥ ' and does_it_satisfy_y(xvalue, coefficients_vars[0], satisfying_values[1]):
                 users_output.insert(data_positioning, 'n Є [ ' + str(xvalue) + ' ; +∞ )')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+                users_output.insert(data_positioning, 'The number of the positive solutions: ∞')
             else:
                 users_output.insert(data_positioning, 'n Є ( ' + str(xvalue) + ' ; +∞ )')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+                users_output.insert(data_positioning, 'The number of the positive solutions: ∞')
         else:
             data_positioning += 2
             if yinequality_sign == ' ≥ ' and does_it_satisfy_x(yvalue, coefficients_vars[2], satisfying_values[0]):
                 users_output.insert(data_positioning, 'n Є [ ' + str(yvalue) + ' ; +∞ )')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+                users_output.insert(data_positioning, 'The number of the positive solutions: ∞')
             else:
                 users_output.insert(data_positioning, 'n Є ( ' + str(yvalue) + ' ; +∞ )')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+                users_output.insert(data_positioning, 'The number of the positive solutions: ∞')
     elif temporary_sign_x == temporary_sign_y == ' < ':
         if xvalue < yvalue or xvalue == yvalue:
             data_positioning += 2
             if xinequality_sign == ' ≤ ' and does_it_satisfy_y(xvalue, coefficients_vars[0], satisfying_values[1]):
                 users_output.insert(data_positioning, 'n Є ( -∞ ; ' + str(xvalue) + ' ]')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+                users_output.insert(data_positioning, 'The number of the positive solutions: ∞')
             else:
                 users_output.insert(data_positioning, 'n Є ( -∞ ; ' + str(xvalue) + ' )')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+                users_output.insert(data_positioning, 'The number of the positive solutions: ∞')
         else:
             data_positioning += 2
             if yinequality_sign == ' ≤ ' and does_it_satisfy_x(yvalue, coefficients_vars[2], satisfying_values[0]):
                 users_output.insert(data_positioning, 'n Є ( -∞ ; ' + str(yvalue) + ' ]')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+                users_output.insert(data_positioning, 'The number of the positive solutions: ∞')
             else:
                 users_output.insert(data_positioning, 'n Є ( -∞ ; ' + str(yvalue) + ' )')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: ∞')
+                users_output.insert(data_positioning, 'The number of the positive solutions: ∞')
     else:
         if xvalue == yvalue:
             if xinequality_sign == ' ≥ ' or xinequality_sign == ' ≤ ':
@@ -363,24 +363,24 @@ def solve():
                     data_positioning += 2
                     users_output.insert(data_positioning, 'n Є { ' + str(xvalue) + ' }')
                     data_positioning += 2
-                    users_output.insert(data_positioning, 'Кол-во положительных решений решений: 1')
+                    users_output.insert(data_positioning, 'The number of the positive solutions: 1')
                 else:
                     data_positioning += 2
                     users_output.insert(data_positioning, 'n Є {}')
                     data_positioning += 2
-                    users_output.insert(data_positioning, 'Кол-во положительных решений решений: 0')
+                    users_output.insert(data_positioning, 'The number of the positive solutions: 0')
             else:
                 data_positioning += 2
                 users_output.insert(data_positioning, 'n Є {}')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: 0')
+                users_output.insert(data_positioning, 'The number of the positive solutions: 0')
 
         elif temporary_sign_x == ' > ':
             if xvalue > yvalue:
                 data_positioning += 2
                 users_output.insert(data_positioning, 'n Є {}')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: 0')
+                users_output.insert(data_positioning, 'The number of the positive solutions: 0')
             else:
                 data_positioning += 2
                 if xinequality_sign == ' ≥ ' and does_it_satisfy_y(xvalue, coefficients_vars[0], satisfying_values[1]):
@@ -400,14 +400,14 @@ def solve():
                 if right_bracket == ' ]':
                     yvalue += 1
                 users_output.insert(data_positioning,
-                                    'Кол-во положительных решений решений: ' + str(yvalue - 1 - xvalue))
+                                    'The number of the positive solutions: ' + str(yvalue - 1 - xvalue))
         else:
 
             if yvalue > xvalue:
                 data_positioning += 2
                 users_output.insert(data_positioning, 'n Є {}')
                 data_positioning += 2
-                users_output.insert(data_positioning, 'Кол-во положительных решений решений: 0')
+                users_output.insert(data_positioning, 'The number of the positive solutions: 0')
             else:
                 data_positioning += 2
                 if yinequality_sign == ' ≥ ' and does_it_satisfy_x(yvalue, coefficients_vars[2], satisfying_values[0]):
@@ -427,7 +427,7 @@ def solve():
                 if right_bracket == ' ]':
                     xvalue += 1
                 users_output.insert(data_positioning,
-                                    'Кол-во положительных решений решений: ' + str(xvalue - 1 - yvalue))
+                                    'The number of the positive solutions: ' + str(xvalue - 1 - yvalue))
 
     users_output['state'] = 'disabled'
 
@@ -443,15 +443,15 @@ def delete():
 users_input = tk.Entry(main_frame, width=32, bg='#f1f1f2', bd=3, font=16, selectbackground='#217ca3',
                        selectforeground='#0f1b07')
 
-language_label = tk.Label(main_frame, fg='#ffffff', font=('Arial Black', 16), text='Введите уравнение: ', bg='#174b5c')
+language_label = tk.Label(main_frame, fg='#ffffff', font=('Arial Black', 16), text='Enter an equation: ', bg='#174b5c')
 
 solve_button = tk.Button(main_frame, fg='#ffffff', bg='#174b5c',
                          activebackground='#09232b', activeforeground='#ffffff', font=('Arial Black', 14),
-                         cursor='hand2', text='Решить', bd=4, relief='ridge', height=1, width=10, command=solve)
+                         cursor='hand2', text='Solve', bd=4, relief='ridge', height=1, width=10, command=solve)
 
 delete_button = tk.Button(main_frame, fg='White', bg='#174b5c',
                           activebackground='#09232b', activeforeground='#ffffff', font=('Arial Black', 14),
-                          cursor='hand2', text='Удалить', bd=4, relief='ridge', height=1, width=10, command=delete)
+                          cursor='hand2', text='Delete', bd=4, relief='ridge', height=1, width=10, command=delete)
 
 users_output = tk.Text(main_frame, width=29, height=15, bg='#f1f1f2', bd=3, font=('Consolas', 14),
                        selectbackground='#217ca3',
